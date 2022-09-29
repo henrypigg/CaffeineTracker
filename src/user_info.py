@@ -1,5 +1,6 @@
 import json
 import time
+import datetime
 import rumps
 
 CAFFEINE_HALF_LIFE = 18000
@@ -43,3 +44,19 @@ class CaffeineLevels:
             
     def add_caffeine(self, amount):
         self.caffeine_level += amount
+
+    def add_adjusted_caffeine(self, amount, time_response):
+        cur_time = datetime.datetime.now().timestamp()
+        time_consumed = datetime.datetime(
+            time_response.year,
+            time_response.month,
+            time_response.day,
+            time_response.hour,
+            time_response.minute,
+            time_response.second
+        ).timestamp()
+        print(time_response)
+
+        print(time_consumed, cur_time)
+        adjusted_amount = amount * (1 / 2) ** ((cur_time - time_consumed) / CAFFEINE_HALF_LIFE)
+        self.caffeine_level += adjusted_amount
